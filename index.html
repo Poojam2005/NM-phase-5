@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Form Validation</title>
+<style> body {
+font-family: Arial, sans-serif;
+background: linear-gradient(to right, #6dd5fa, #ffffff); display: flex;
+justify-content: center; align-items: center; height: 100vh;
+}
+form { background: #fff;
+ 
+padding: 30px; border-radius: 15px;
+box-shadow: 0 5px 15px rgba(0,0,0,0.2); width: 360px;
+}
+h2 {
+text-align: center; color: #333;
+margin-bottom: 20px;
+}
+label {
+font-weight: bold; display: block; margin-top: 10px;
+}
+input { width: 100%;
+padding: 10px; margin: 6px 0 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;
+}
+input:focus {
+border-color: #007BFF;
+ 
+outline: none;
+}
+.error { color: red;
+font-size: 13px; height: 16px;
+}
+.success { color: green; font-size: 13px;
+}
+button { width: 100%; padding: 10px;
+background: #007BFF; color: white;
+border: none; border-radius: 6px; font-size: 16px; cursor: pointer; margin-top: 10px;
+}
+button:hover { background: #0056b3;
+}
+ 
+#submitMessage { text-align: center; margin-top: 10px; font-weight: bold;
+}
+</style>
+</head>
+<body>
+<form id="liveForm">
+<h2>Interactive Form</h2>
+
+
+<label>Name:</label>
+<input type="text" id="name" placeholder="Enter your name">
+<div id="nameError" class="error"></div>
+
+
+<label>Email:</label>
+<input type="email" id="email" placeholder="Enter your email">
+<div id="emailError" class="error"></div>
+
+
+<label>Password:</label>
+<input type="password" id="password" placeholder="Enter password">
+<div id="passwordError" class="error"></div>
+
+
+<label>Confirm Password:</label>
+<input type="password" id="confirm" placeholder="Re-enter password">
+ 
+<div id="confirmError" class="error"></div>
+
+
+<label>Phone Number:</label>
+<input type="text" id="phone" placeholder="Enter 10-digit phone number">
+<div id="phoneError" class="error"></div>
+
+
+<button type="submit">Submit</button>
+<div id="submitMessage"></div>
+</form>
+
+
+<script>
+const nameField = document.getElementById('name'); const emailField = document.getElementById('email');
+const passwordField = document.getElementById('password'); const confirmField = document.getElementById('confirm'); const phoneField = document.getElementById('phone'); const form = document.getElementById('liveForm');
+
+// Name Validation nameField.addEventListener('input', () => { const name = nameField.value.trim();
+document.getElementById('nameError').innerText = name ? '' : 'Name is required.';
+});
+ 
+// Email Validation emailField.addEventListener('input', () => { const email = emailField.value.trim();
+const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; document.getElementById('emailError').innerText =
+!email ? 'Email is required.' : (regex.test(email) ? '' : 'Invalid email format.');
+});
+
+
+// Password Validation passwordField.addEventListener('input', () => { const password = passwordField.value;
+const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/; const errorDiv = document.getElementById('passwordError'); if (!password) errorDiv.innerText = 'Password is required.'; else if (!regex.test(password))
+errorDiv.innerText = 'Min 8 chars, 1 uppercase, 1 number & 1 special symbol.'; else errorDiv.innerText = '';
+});
+
+
+// Confirm Password Validation confirmField.addEventListener('input', () => { const confirm = confirmField.value;
+const password = passwordField.value; document.getElementById('confirmError').innerText = confirm !== password ? 'Passwords do not match.' : '';
+ 
+});
+
+
+// Phone Number Validation phoneField.addEventListener('input', () => { const phone = phoneField.value;
+const regex = /^\d{10}$/; document.getElementById('phoneError').innerText =
+!regex.test(phone) ? 'Enter valid 10-digit phone number.' : '';
+});
+
+
+// On Form Submit form.addEventListener('submit', (e) => { e.preventDefault();
+const errors = document.querySelectorAll('.error');
+const hasError = Array.from(errors).some(error => error.innerText !== '');
+const emptyFields = [nameField, emailField, passwordField, confirmField, phoneField]
+.some(field => !field.value.trim());
+
+
+const message = document.getElementById('submitMessage'); if (hasError || emptyFields) {
+message.style.color = 'red';
+message.innerText = 'Please correct the errors before submitting.';
+} else {
+message.style.color = 'green';
+message.innerText = 'Form submitted successfully!';
+ 
+form.reset();
+}
+});
+</script>
+</body>
+</html>
